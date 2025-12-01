@@ -33,14 +33,20 @@ public class KuznyechikDemo {
         // 5. Шифрование (Кузнечик в режиме CBC с PKCS7Padding)
         byte[] ciphertext = encrypt(plaintextBytes, key, iv);
 
-        // 6. Расшифрование
-        byte[] decrypted = decrypt(ciphertext, key, iv);
+        // 6.1 Генерируем ещё один случайный IV
+        byte[] ivBytes2 = new byte[16]; // размер блока Кузнечика 128 бит
+        random.nextBytes(ivBytes2);
+        IvParameterSpec iv2 = new IvParameterSpec(ivBytes2);
+
+        // 6.2 Расшифрование
+        byte[] decrypted = decrypt(ciphertext, key, iv2);
         String decryptedText = new String(decrypted, StandardCharsets.UTF_8);
 
         // 7. Выводим всё на экран
         System.out.println("Plaintext:   " + plaintext);
         System.out.println("Key (hex):   " + toHex(keyBytes));
         System.out.println("IV  (hex):   " + toHex(ivBytes));
+        System.out.println("IV2  (hex):   " + toHex(ivBytes2));
         System.out.println("Ciphertext:  " + toHex(ciphertext));
         System.out.println("Decrypted:   " + decryptedText);
     }
