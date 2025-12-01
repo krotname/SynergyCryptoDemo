@@ -29,8 +29,13 @@ public class TripleDESDemo {
         // 3. Шифрование
         String cipherTextBase64 = encrypt(plaintext, key, iv);
 
-        // 4. Расшифрование
-        String decrypted = decrypt(cipherTextBase64, key, iv);
+        // 4.1 Генерируем ещё один случайный IV
+        byte[] ivBytes2 = new byte[8];
+        new SecureRandom().nextBytes(ivBytes2);
+        IvParameterSpec iv2 = new IvParameterSpec(ivBytes2);
+
+        // 4.2 Расшифрование
+        String decrypted = decrypt(cipherTextBase64, key, iv2);
 
         // 5. Печатаем, чтобы увидеть, что всё работает
         System.out.println("Открытый текст        : " + plaintext);
@@ -38,6 +43,8 @@ public class TripleDESDemo {
                 Base64.getEncoder().encodeToString(key.getEncoded()));
         System.out.println("IV (Base64)           : " +
                 Base64.getEncoder().encodeToString(ivBytes));
+        System.out.println("IV2 (Base64)           : " +
+                Base64.getEncoder().encodeToString(ivBytes2));
         System.out.println("Шифртекст (Base64)    : " + cipherTextBase64);
         System.out.println("Расшифрованный текст  : " + decrypted);
     }
